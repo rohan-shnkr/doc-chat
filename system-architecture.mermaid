@@ -1,0 +1,47 @@
+flowchart TD
+    subgraph Frontend["Frontend (React/Next.js)"]
+        UI[Document Viewer & Chat Interface]
+        PDF[PDF Renderer]
+        STT[Speech-to-Text Module]
+        TTS[Text-to-Speech Module]
+        HIGHLIGHT[Document Highlighter]
+    end
+
+    subgraph Backend["Backend Server"]
+        API[API Gateway]
+        DOC_PROC[Document Processor]
+        EMBED[Embedding Generator]
+        TRANS[Translation Service]
+        KB[Knowledge Base]
+        RAG[RAG Engine]
+        CHAT[Chat Orchestrator]
+    end
+
+    subgraph External["External Services"]
+        ELEVEN[ElevenLabs API]
+        LLM[LLM API]
+        VECTOR_DB[(Vector Database)]
+    end
+
+    %% Data Flow
+    UI --> STT
+    STT --> API
+    API --> CHAT
+    CHAT --> RAG
+    RAG --> VECTOR_DB
+    RAG --> LLM
+    CHAT --> TRANS
+    TRANS --> TTS
+    TTS --> ELEVEN
+    ELEVEN --> UI
+    
+    %% Document Processing Flow
+    PDF --> DOC_PROC
+    DOC_PROC --> EMBED
+    EMBED --> VECTOR_DB
+    CHAT --> HIGHLIGHT
+    HIGHLIGHT --> UI
+    
+    %% Knowledge Base Flow
+    DOC_PROC --> KB
+    RAG --> KB
