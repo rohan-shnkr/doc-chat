@@ -167,16 +167,11 @@ def process_query(audio_file):
     
     return extracted_text, extracted_src_lang
 
-def get_rag_response(input_text):
-    output, loc = rag_agent.rag_agent(input_text)
-
-    return output, loc
-
 def process_rag_output(text, tgt_lang):
     #Translate to tgt_lang
     print("Language sent to translation:", LANGUAGE_MAPPING_DICT[tgt_lang])
     translated_dict = translation.translate_text(text, src_lang='eng_Latn', tgt_lang=LANGUAGE_MAPPING_DICT[tgt_lang])
-    # print(translated_dict[0]['translation_text'])
+    print(translated_dict[0]['translation_text'])
     translated_text = translated_dict[0]['translation_text']
 
     return translated_text
@@ -194,17 +189,25 @@ def voice_output(text, voice_id="pNInz6obpgDQGcFmaJgB"):
     while mixer.music.get_busy():
         pygame.time.Clock().tick(10)
 
+def run_voice_chat(filename):
+    rag_chain = rag_agent.setup_pdf_rag(filename=filename)
+
+    try:
+        while True:
+            audio_file = record_audio()
+            print(f"Audio saved to: {audio_file}")
+            extracted_text, extracted_lang = process_query(audio_file=audio_file)
+            print(extracted_text, extracted_lang)
+            rag_response = rag_agent.rag_agent_response({"input": f"{extracted_text}"}, rag_chain)
+            rag_response_text = rag_response["answer"]
+            translated_text = process_rag_output(rag_response_text, extracted_lang)
+            voice_output(translated_text)
+            print("Bot has finished answer. Your turn")
+    except KeyboardInterrupt:
+        print('interrupted!')
+
+    print("Chat ended")
+    return
+
 if __name__ == "__main__":
-    # Test the recording function
-    audio_file = record_audio()
-    print(f"Audio saved to: {audio_file}")
-
-    extracted_text, extracted_lang = process_query(audio_file=audio_file)
-    print(extracted_text, extracted_lang)
-
-    rag_response_text, loc = get_rag_response(extracted_text)
-    print(rag_response_text, loc)
-
-    translated_text = process_rag_output(rag_response_text, extracted_lang)
-
-    voice_output(translated_text)
+    run_voice_chat("./test-file/sample-pdf.pdf")

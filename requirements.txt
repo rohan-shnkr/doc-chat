@@ -19,3 +19,4 @@ pygame
 sounddevice
 scipy
 pydub
+dotenv
