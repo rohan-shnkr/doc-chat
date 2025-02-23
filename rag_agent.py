@@ -1,3 +1,10 @@
-def rag_agent(input_text):
-    response = "For a few months this year there was a rare moment of economic consensus. The rich world's central banks, especially America's Federal Reserve, had uncaged inflation. They had to correct the error by raising interest rates sharply and swiftly. But as 2022 draws to a close the uneasy peace between doves and hawks has broken down. Their latest disagreement about monetary policy is so big it is as if they are working with different sets of facts. While some economists warn that interest rates have now risen by more than is necessary to contain price growth, others say that monetary policy has not really tightened at all."
-    return response, 0
+import langchain_pdf_retriever
+
+def rag_agent(input_text, filename):
+    rag_chain = langchain_pdf_retriever.MistralPDF(filename)
+    results = rag_chain.invoke(input_text)
+
+    print(results)
+
+if __name__ == "__main__":
+    rag_agent({"input": "Who was Rockefeller?"}, filename = "C:/Users/sriva/OneDrive/My Tech Projects/doc-chat/doc-chat/test-file/sample-pdf.pdf")

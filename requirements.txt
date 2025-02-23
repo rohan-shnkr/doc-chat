@@ -1,3 +1,16 @@
+PyMuPDF==1.25.3
+transformers==4.41.2
+torch==2.3.0
+upstash-vector==0.1.0
+python-dotenv==1.0.1
+langchain-mistralai
+pypdf
+langchain_community
+langchain_chroma
+langchain_openai
+hnswlib==0.7.0
+wheel
+setuptools
 elevenlabs
 python-dotenv
 huggingface-hub
