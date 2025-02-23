@@ -174,6 +174,7 @@ def get_rag_response(input_text):
 
 def process_rag_output(text, tgt_lang):
     #Translate to tgt_lang
+    print("Language sent to translation:", LANGUAGE_MAPPING_DICT[tgt_lang])
     translated_dict = translation.translate_text(text, src_lang='eng_Latn', tgt_lang=LANGUAGE_MAPPING_DICT[tgt_lang])
     # print(translated_dict[0]['translation_text'])
     translated_text = translated_dict[0]['translation_text']
@@ -199,10 +200,10 @@ if __name__ == "__main__":
     print(f"Audio saved to: {audio_file}")
 
     extracted_text, extracted_lang = process_query(audio_file=audio_file)
-    # print(extracted_text, extracted_lang)
+    print(extracted_text, extracted_lang)
 
     rag_response_text, loc = get_rag_response(extracted_text)
-    # print(rag_response_text, loc)
+    print(rag_response_text, loc)
 
     translated_text = process_rag_output(rag_response_text, extracted_lang)
 
