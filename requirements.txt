@@ -1,0 +1,8 @@
+elevenlabs
+python-dotenv
+huggingface-hub
+fal-client
+pygame
+sounddevice
+scipy
+pydub
