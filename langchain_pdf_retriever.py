@@ -8,6 +8,7 @@ from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.document_loaders import PyPDFLoader
+from langchain_mistralai import MistralAIEmbeddings
 
 def pdf_loader(file_path):
     loader = PyPDFLoader(file_path)
@@ -35,19 +36,19 @@ def MistralPDF(pdf_file):
     persist_directory = "chroma_db"
 
     vectorstore = Chroma.from_documents(documents=splits, 
-                                        embedding=OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY")),
+                                        embedding=MistralAIEmbeddings(model="mistral-embed", max_retries=5),
                                         persist_directory=persist_directory)
 
-    retriever = vectorstore.as_retriever()
+    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
     system_prompt = (
         "You are an assistant for question-answering tasks. "
         "Use the following pieces of retrieved context to answer "
-        "the question. If you don't know the answer, say that you "
-        "don't know. Use three sentences maximum and keep the "
-        "answer concise."
-        "\n\n"
-        "{context}"
+        "the question. You should answer like a podcaster "
+        "be enthusiastic and engaging in your tone but also be concise. "
+        "Previous conversation history is provided to maintain context.\n\n"
+        "Conversation history: {chat_history}\n"
+        "Context: {context}\n"
     )
 
     prompt = ChatPromptTemplate.from_messages(

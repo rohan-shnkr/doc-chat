@@ -171,8 +171,12 @@ def process_rag_output(text, tgt_lang):
     #Translate to tgt_lang
     print("Language sent to translation:", LANGUAGE_MAPPING_DICT[tgt_lang])
     translated_dict = translation.translate_text(text, src_lang='eng_Latn', tgt_lang=LANGUAGE_MAPPING_DICT[tgt_lang])
+    # try:
     print(translated_dict[0]['translation_text'])
     translated_text = translated_dict[0]['translation_text']
+    # except Exception as e:
+    #     print(translated_dict['translation_text'])
+    #     translated_text = translated_dict['translation_text']
 
     return translated_text
 
@@ -191,6 +195,7 @@ def voice_output(text, voice_id="pNInz6obpgDQGcFmaJgB"):
 
 def run_voice_chat(filename):
     rag_chain = rag_agent.setup_pdf_rag(filename=filename)
+    chat_history = []
 
     try:
         while True:
@@ -198,8 +203,11 @@ def run_voice_chat(filename):
             print(f"Audio saved to: {audio_file}")
             extracted_text, extracted_lang = process_query(audio_file=audio_file)
             print(extracted_text, extracted_lang)
-            rag_response = rag_agent.rag_agent_response({"input": f"{extracted_text}"}, rag_chain)
+            rag_response = rag_agent.rag_agent_response({"input": f"{extracted_text}"},
+                                                        rag_chain, 
+                                                        chat_history)
             rag_response_text = rag_response["answer"]
+            chat_history.append((extracted_text, rag_response_text))
             translated_text = process_rag_output(rag_response_text, extracted_lang)
             voice_output(translated_text)
             print("Bot has finished answer. Your turn")

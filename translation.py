@@ -12,6 +12,9 @@ def query(payload):
 	return response.json()
 
 def translate_text(text, src_lang, tgt_lang):
+	if src_lang == tgt_lang:
+		return [{'translation_text': text}]
+	
 	output = query({
 			"inputs": text,
 			"parameters": {
