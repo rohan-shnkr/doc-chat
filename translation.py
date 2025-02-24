@@ -15,13 +15,25 @@ def translate_text(text, src_lang, tgt_lang):
 	if src_lang == tgt_lang:
 		return [{'translation_text': text}]
 	
-	output = query({
-			"inputs": text,
-			"parameters": {
-				"src_lang": src_lang,
-				"tgt_lang": tgt_lang
-			}
-		})
+	try:
+		output = query({
+				"inputs": text,
+				"parameters": {
+					"src_lang": src_lang,
+					"tgt_lang": tgt_lang
+				}
+			})
+	except Exception as e:
+		try:
+			output = query({
+					"inputs": text,
+					"parameters": {
+						"src_lang": src_lang,
+						"tgt_lang": tgt_lang
+					}
+				})
+		except Exception as e:
+			output = [{'translation_text': text}]
 
 	return output
 

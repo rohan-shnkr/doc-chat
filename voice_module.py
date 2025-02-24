@@ -171,12 +171,12 @@ def process_rag_output(text, tgt_lang):
     #Translate to tgt_lang
     print("Language sent to translation:", LANGUAGE_MAPPING_DICT[tgt_lang])
     translated_dict = translation.translate_text(text, src_lang='eng_Latn', tgt_lang=LANGUAGE_MAPPING_DICT[tgt_lang])
-    # try:
-    print(translated_dict[0]['translation_text'])
-    translated_text = translated_dict[0]['translation_text']
-    # except Exception as e:
-    #     print(translated_dict['translation_text'])
-    #     translated_text = translated_dict['translation_text']
+    try:
+        print(translated_dict[0]['translation_text'])
+        translated_text = translated_dict[0]['translation_text']
+    except Exception as e:
+        print(translated_dict['translation_text'])
+        translated_text = translated_dict['translation_text']
 
     return translated_text
 

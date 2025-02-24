@@ -35,10 +35,12 @@ def MistralPDF(pdf_file):
 
     persist_directory = "chroma_db"
 
+    # vectorstore = Chroma.from_documents(documents=splits, 
+    #                                     embedding=MistralAIEmbeddings(model="mistral-embed", max_retries=5),
+    #                                     persist_directory=persist_directory)
     vectorstore = Chroma.from_documents(documents=splits, 
-                                        embedding=MistralAIEmbeddings(model="mistral-embed", max_retries=5),
+                                        embedding=OpenAIEmbeddings(api_key = os.getenv("OPENAI_API_KEY")),
                                         persist_directory=persist_directory)
-
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
     system_prompt = (
