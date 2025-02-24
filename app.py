@@ -1,6 +1,6 @@
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# __import__('pysqlite3')
+# import sys
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 import streamlit as st
 import sounddevice as sd
@@ -276,14 +276,21 @@ def main():
         
         # Recording controls
         with col1:
-            if st.button("Ask me Anything"):
+            audio_value = st.audio_input("Record a voice message")
+            if audio_value:
+            # if st.button("Ask me Anything"):
                 st.markdown("""
                     <div style=''background-color: #E8F0FE; padding: 20px; border-radius: 10px'>
-                        <p style='color: #424242;'>Recording... (speak now, will stop after 5 seconds of silence).</p>
+                        <p style='color: #424242;'>Recording...</p>
                     </div>
                 """, unsafe_allow_html=True)
                 st.session_state.is_recording = True
-                user_audio_path = record_audio()
+                # user_audio_path = record_audio()                
+                recording = np.frombuffer(audio_value.getbuffer(), dtype=np.int16)
+                user_audio_path = st.session_state.file_manager.save_user_audio(
+                        recording,
+                        sample_rate=44100
+                    )
                 st.markdown("""
                     <div style=''background-color: #E8F0FE; padding: 20px; border-radius: 10px'>
                         <p style='color: #424242;'>Recording complete.</p>
