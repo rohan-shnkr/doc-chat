@@ -12,7 +12,7 @@ hnswlib==0.7.0
 chroma-hnswlib==0.7.1
 wheel
 setuptools
-elevenlabs
+elevenlabs==0.6.1
 python-dotenv
 huggingface-hub
 fal-client
