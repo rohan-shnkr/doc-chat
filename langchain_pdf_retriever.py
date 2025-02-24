@@ -33,14 +33,14 @@ def MistralPDF(pdf_file):
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splits = text_splitter.split_documents(docs)
 
-    # persist_directory = "chroma_db"
+    persist_directory = "chroma_db"
 
     # vectorstore = Chroma.from_documents(documents=splits, 
     #                                     embedding=MistralAIEmbeddings(model="mistral-embed", max_retries=5),
     #                                     persist_directory=persist_directory)
     vectorstore = Chroma.from_documents(documents=splits, 
-                                        embedding=OpenAIEmbeddings(api_key = os.getenv("OPENAI_API_KEY")))
-                                        # persist_directory=persist_directory)
+                                        embedding=OpenAIEmbeddings(api_key = os.getenv("OPENAI_API_KEY")),
+                                        persist_directory=persist_directory)
     retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
 
     system_prompt = (
