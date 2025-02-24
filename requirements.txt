@@ -9,7 +9,7 @@ langchain_community
 langchain_chroma
 langchain_openai
 hnswlib==0.7.0
-chroma-hnswlib==0.7.1
+chromadb[hnswlib]==0.4.15
 wheel
 setuptools
 elevenlabs
