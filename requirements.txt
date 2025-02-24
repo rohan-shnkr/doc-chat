@@ -9,7 +9,6 @@ langchain_community
 langchain_chroma
 langchain_openai
 hnswlib==0.7.0
-chromadb[hnswlib]==0.4.15
 chromadb==0.3.29
 wheel
 setuptools
